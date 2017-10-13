@@ -28,8 +28,22 @@ app.set('view-engine', '.hbs');
 app.use(express.static('./public'));
 
 // configure middleware
+app.use(bodyParser.urlencoded( { extended: true } ));
 app.use(methodOverride('_method'));
 
+// use middle - utilize cookies for managing user authentication
+app.use(cookieParser());
+
+// controller routes
+
+
+
+// set port number
+const portNumber = process.env.PORT || 3000
+// start application
+app.listen( portNumber, () => {
+    console.log('Application is running on port === ' + portNumber);
+})
 
 
 
