@@ -5,9 +5,42 @@ An application in which users can voteup a coin's popularity seperated by catego
 
 ##### Requirements:
 - Registration
-    - Persist user details to DB
+    - Persist user details to DB (Done)
+        - passwords entry in form must match (Done)
+        - cannot register mulitple times (Done)
     - user model
+        - add fields and defaults (In-Progress)
     - JWT authentication
+        - store as local cookie (done)
+        - verify authenticated token (done)
+    - Add Styles to page
+        - Register
+    - Error page (In progress)
+        - passwords do not match (done)
+        - user already registered (done)
+        - style error page 
+        - eliminate error page, utilize session to pass result
+- Login
+    - Authenticate (done)
+        - decrypt token fron local cookie (done)
+    - Login route
+        - Get Route (done)
+        - Post Route (done)
+        - handle invalid credentials (done)
+            - invalid username / email (done)
+            - invalid password (done)
+    - Persist user data to other routes
+        - index.hbs - GET (Done)
+        - 
+- Logout 
+    - Routes
+        - Get route to logout (done)
+        - clear cookies (done)
+- Site navbar
+    - action links
+        - Login (done)
+        - Logout (done)
+        - Register (done)
 - Comments on token
     - user can post comment (depth = 1)
 - Vote up coin
@@ -17,4 +50,10 @@ An application in which users can voteup a coin's popularity seperated by catego
     - coin model
 
 
+##### Task to complete:
+- Registration
+    - register template
+    - register route
+    - user model
+    - 
 
