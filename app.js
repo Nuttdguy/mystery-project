@@ -31,6 +31,9 @@ const handlebars = exphbs.create({
                 + ' ' + tokenData.getDate() 
                 + ' ' + tokenData.getFullYear();
             return d;
+        },
+        tallyCount: function(tokenData) {
+            return tokenData.count - tokenData.downCount;
         }
     }
 });

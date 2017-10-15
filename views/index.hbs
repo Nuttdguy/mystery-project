@@ -10,7 +10,11 @@
             <p>
                 {{!-- <img src="{{this.imageUrl}}" alt="logo">  --}}
                 <a href="/token/t/{{this.name}}">{{this.name}}</a>
-                <span>({{this.popularity.count}})</span>
+                <span>(
+                {{#tallyCount this.popularity}} 
+                    {{ this }} 
+                {{/tallyCount}} 
+                )</span>
             </p>
         {{/each}}
     </section>
@@ -38,7 +42,9 @@
                     <th>Token Name</th>
                     <th>Description</th>
                     <th>Added By</th>
-                    <th>Popular Votes</th>
+                    {{!-- <th>Up Vote</th>
+                    <th>Down Vote</th> --}}
+                    <th>Total Votes</th>
                     <th>Vote</th>
                 </tr>
             </thead>
@@ -51,7 +57,12 @@
                     <td>{{this.name }}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.addedBy }}</td>
-                    <td>{{this.popularity.count }}</td>
+                    {{!-- <td>{{this.popularity.count }}</td>
+                    <td>{{this.popularity.downCount }}</td> --}}
+                    <td>{{#tallyCount this.popularity}} 
+                            {{ this }} 
+                        {{/tallyCount}} 
+                    </td>
                     <td>
                         <a href="/token/t/{{this._id}}/1">up</a>
                         <a href="/token/t/{{this._id}}/2">down</a>

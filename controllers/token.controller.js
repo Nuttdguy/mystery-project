@@ -13,7 +13,7 @@ router.get('/t', (req, res, next) => {
     let currentUser = req.user;
 
     if (!currentUser) {
-        return res.status(401).redirect('/auth/login');
+        res.status(401).redirect('/auth/login');
     }
 
     return res.render('token', {currentUser} );
@@ -27,7 +27,7 @@ router.get('/t/:tokenName', (req, res, next) => {
 
     TokenModel.findOne({name: req.params.tokenName}, function(err, tokenData) {
         if (err) {
-            return res.status(401).redirect('/'); 
+            res.status(401).redirect('/'); 
         }
         return res.render('token-detail', { currentUser, tokenData, isNotEdit });
     });
@@ -41,7 +41,7 @@ router.get('/t/:tokenId/edit', (req, res, next) => {
 
     TokenModel.findOne({_id: req.params.tokenId}, function(err, tokenData) {
         if (err) {
-            return res.status(401).redirect('/'); 
+            res.status(401).redirect('/'); 
         }
         return res.render('token-detail', { currentUser, tokenData, isNotEdit });
     });
@@ -53,13 +53,25 @@ router.get('/t/:tokenId/:vote', (req, res, next) => {
     const currentUser = req.user;
     const vote = req.params.vote;
     const tokenId = req.params.tokenId;
-    console.log('In token route')
+
     if (vote == 1) {
+        console.log('IN TOKEN UP VOTE ROUTE')
         TokenModel.findById({_id: tokenId}, (err, tokenData) => {
-            let nameExist = 0;
 
             // Verify user is logged in
             if (currentUser) {
+                let nameToRemove = currentUser.username;
+                let nameExist = 0;
+                
+                // remove downvote and user if upvoted
+                for (let idx = 0; idx < tokenData.popularity.downVotes.length; idx++) {
+                    if (nameToRemove === tokenData.popularity.downVotes[idx]) {
+                        tokenData.popularity.downVotes.splice(idx, 1);
+                        let votes = tokenData.popularity.downCount - 1;
+                        tokenData.popularity.downCount = votes;
+                    }
+                }
+
                 // check if user already exist in DB, keep count to prevent duplicate votes
                 for (let idx = 0; idx < tokenData.popularity.votes.length; idx++) {
                     if (currentUser.username === tokenData.popularity.votes[idx]) {
@@ -74,31 +86,71 @@ router.get('/t/:tokenId/:vote', (req, res, next) => {
                 }
             }
 
-            // tokenData.save(function(err) {
-            //     if (err) {
-            //         return res.status(401).send(err);
-            //     }  
-            // });
+            tokenData.save(function(err) {
+                if (err) {
+                    res.status(401).send(err);
+                }  
+            });
 
-            // can do this
             return tokenData;
-            // can't do this, header error
-            // return res.redirect('/');
-        }).then( (tokenData) => {
-            console.log(tokenData);
+
+        }).then((tokenData) => {
+
+            res.redirect('/');  
+
+        }).catch( (err) => {
+            console.log(err);
+        })
+    } else if (vote == 2) {
+        console.log('IN TOKEN DOWN VOTE ROUTE')
+        TokenModel.findById({_id: tokenId}, (err, tokenData) => {
+
+            // Verify user is logged in
+            if (currentUser) {
+                let nameToRemove = currentUser.username;
+                let nameExist = 0;
+                let hasUpVoted = false;
+
+                // remove user from upvotes && decrease upvote by 1
+                for (let idx = 0; idx < tokenData.popularity.votes.length; idx++) {
+                    if (nameToRemove === tokenData.popularity.votes[idx]) {
+                        tokenData.popularity.votes.splice(idx, 1);
+                        let votes = tokenData.popularity.count - 1;
+                        tokenData.popularity.count = votes;
+                        hasUpVoted = true;
+                    }
+                }
+
+                // add user to down votes
+                for (let idx = 0; idx < tokenData.popularity.downVotes.length; idx++) {
+                    if (nameToRemove === tokenData.popularity.downVotes[idx]) {
+                        nameExist++;
+                    }
+                }
+
+                if (nameExist === 0) {
+                    let votes = tokenData.popularity.downCount + 1;
+                    tokenData.popularity.downCount = votes;
+                    tokenData.popularity.downVotes.push(currentUser.username);
+                } 
+            }
+
             tokenData.save(function(err) {
                 if (err) {
                     return res.status(401).send(err);
                 }  
             });
 
-            return res.redirect('/');
+            return tokenData;
+        }).then((tokenData) => {
+          
+            res.redirect('/');  
+
         }).catch( (err) => {
             console.log(err);
         })
-    }
+    } 
 
-    // return res.redirect('/');
 })
 
 //===========================================================

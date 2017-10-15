@@ -25,7 +25,11 @@ const TokenSchema = schema({
         votes: [
             String
         ],
-        count: Number
+        count: Number,
+        downVotes: [
+            String
+        ],
+        downCount: Number
     },
     originDate: {
         type: Date
@@ -46,6 +50,10 @@ TokenSchema.pre('save', function(next) {
 
     if (!this.popularity.count) {
         this.popularity.count = 0;
+    }
+
+    if (!this.popularity.downCount) {
+        this.popularity.downCount = 0;
     }
     next();
 })
