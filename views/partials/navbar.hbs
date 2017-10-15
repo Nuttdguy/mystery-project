@@ -4,17 +4,18 @@
     <div class="navbar">
         {{#if message}} 
             <span class="message">{{message}} </span>
-            <span><a href="/login">Login</a></span>
-            <span><a href="/register">Register</a></span>
+            <span><a href="/auth/login">Login</a></span>
+            <span><a href="/auth/register">Register</a></span>
         {{/if}}
         <div class="auth"></div>
         {{#if currentUser.username}}
                 <span> Welcome :: {{currentUser.username}} </span>
-                <span><a href="/logout">Logout</a></span>
-            {{else currentUser.username}}
-                <span><a href="/login">Login</a></span>
-                <span><a href="/register">Register</a></span>
+                <span><a href="/auth/logout">Logout</a></span>
         {{/if}}
         </div>
     </div>
 </div>
+
+
+
+

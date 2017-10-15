@@ -49,6 +49,19 @@ An application in which users can voteup a coin's popularity seperated by catego
     - user can downvote
 - Add coin (manual entry)
     - coin model (done)
+    - prevent duplicate entries (in-progress - cannot set header err, when redirecting )
+- Update coin
+    - update coin (done)
+    - route to home-index (done)
+    - add PUT route (done)
+    - Enhance
+        - _method-override implementation
+- Delete coin
+    - delete coin (done)
+    - route to home-index (done)
+    - add Delete route (done)
+    - Enhance
+        - _method-override implementation
 - Admin routes
     - 
 - Index view

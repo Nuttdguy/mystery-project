@@ -64,7 +64,7 @@ const tokenRoutes = require('./controllers/token.controller');
 
 // define routes to use
 app.use('/', homeRoutes);
-app.use('/', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/token', tokenRoutes);
 
 

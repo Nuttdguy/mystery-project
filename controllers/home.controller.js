@@ -12,12 +12,11 @@ router.get('/', (req, res, next) => {
     }
 
     // render token for sidebar
-    TokenModel.find().exec( function(err, tokenData) {
+    TokenModel.find({}).exec( function(err, tokenData) {
         return res.render('index', { message, currentUser, tokenData } );
     });
 
 })
-
 
 
 module.exports = router;
