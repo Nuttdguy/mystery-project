@@ -18,10 +18,17 @@ mongoose.Promise = global.Promise;
 const handlebars = exphbs.create({
     extname: '.hbs',
     defaultLayout: 'main',
-    helpers: {
-
+    helpers: {     
+        isNotNullItem: function(item) {
+            console.log(item + '==== ITEM');
+            if (item === null || item === '' || item === {}) {
+                return;
+            }
+            return item;
+        }
     }
 });
+
 
 // set configuration for Express 
 app.engine('.hbs', handlebars.engine );
@@ -32,30 +39,33 @@ app.use(express.static('./public'));
 app.use(bodyParser.urlencoded( { extended: true } ));
 app.use(methodOverride('_method'));
 
-const checkAuth = function(req, res, next) {
+// use middle - utilize cookies for managing user authentication
+app.use(cookieParser());
+
+app.use( function(req, res, next) {
     console.log('Authenticating user with middleware');
-    let token = req.cookies.jwtToken;
 
     if (typeof req.cookies.jwtToken === 'undefined' || req.cookies.jwtToken === null) {
         req.user = null;
     } else {
+        let token = req.cookies.jwtToken;
         let decodedToken = jsonWebToken.decode(token, {complete: true}) || {};
         req.user = decodedToken.payload;
     }
     next();
-}
+});
 
-// use middle - utilize cookies for managing user authentication
-app.use(cookieParser());
-app.use(checkAuth);
+// app.use(checkAuth);
 
 // controller routes
 const homeRoutes = require('./controllers/home.controller');
 const authRoutes = require('./controllers/auth.controller');
+const tokenRoutes = require('./controllers/token.controller');
 
 // define routes to use
 app.use('/', homeRoutes);
 app.use('/', authRoutes);
+app.use('/token', tokenRoutes);
 
 
 

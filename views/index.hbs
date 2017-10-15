@@ -1,17 +1,32 @@
 
-<div class="navbar">
-    {{#if message}} 
-            <span>{{message}} </span>
-            <span><a href="/login">Login</a></span>
-            <span><a href="/register">Register</a></span>
-        {{else}}
-            <span> Welcome :: {{currentUser.username}} </span>
-            <span><a href="/logout">Logout</a></span><br>
-    {{/if}}
-    <hr>
-</div>
+<article class="article-wrapper">   
+    <section class="nav-sidebar">
+        sidebar nav --> for selection of listed ico's, coins
+        <span><a href="/token/t">// Add token</a></span>
+        - view ico
+        - add new ico
 
-<article>   
-    <section> sidebar nav</section>
-    <section> main content</section>
+        {{#each tokenData}}
+            <p>
+                <img src="{{this.imageUrl}}" alt="logo"> 
+                <a href="/token/t/{{this.name}}">{{this.name}}</a>
+                <span>({{this.popularity.count}})</span>
+            </p>
+        {{/each}}
+    </section>
+
+    <section class="main-content"> 
+        main content
+        - view 
+            - view limit
+                - most recent 10 (default view)
+                - pagination ( next 10 )
+            - view content
+                - name of coin, ico
+                - image of coin / token ico
+                - open/closed ico
+                - description of technology
+                - current value
+
+    </section>
 </article>

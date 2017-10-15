@@ -1,0 +1,20 @@
+
+<link rel="stylesheet" href="/css/style.css">
+<div class="navbar-wrapper">
+    <div class="navbar">
+        {{#if message}} 
+            <span class="message">{{message}} </span>
+            <span><a href="/login">Login</a></span>
+            <span><a href="/register">Register</a></span>
+        {{/if}}
+        <div class="auth"></div>
+        {{#if currentUser.username}}
+                <span> Welcome :: {{currentUser.username}} </span>
+                <span><a href="/logout">Logout</a></span>
+            {{else currentUser.username}}
+                <span><a href="/login">Login</a></span>
+                <span><a href="/register">Register</a></span>
+        {{/if}}
+        </div>
+    </div>
+</div>

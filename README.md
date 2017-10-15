@@ -32,6 +32,7 @@ An application in which users can voteup a coin's popularity seperated by catego
     - Persist user data to other routes
         - index.hbs - GET (Done)
         - 
+    - Relocate JWT Salt 
 - Logout 
     - Routes
         - Get route to logout (done)
@@ -47,13 +48,13 @@ An application in which users can voteup a coin's popularity seperated by catego
     - user can upvote
     - user can downvote
 - Add coin (manual entry)
-    - coin model
-
-
-##### Task to complete:
-- Registration
-    - register template
-    - register route
-    - user model
+    - coin model (done)
+- Admin routes
     - 
+- Index view
+    - sidebar
+        - display coin name (done)
+        - display coin image (in-progress)
+        - link coin to display details-view (done)
+
 

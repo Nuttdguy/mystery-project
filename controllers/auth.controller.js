@@ -6,11 +6,23 @@ const jwt = require('jsonwebtoken');
 
 //==| GET ||==> GET REGISTRATION 
 router.get('/register', (req, res, next) => {
+    let currentUser = req.user;
+    let message = null;
+
+    if (currentUser === null) {
+        message = 'Please Sign-In or Register';
+    }
     return res.render('register');
 });
 
 //==| GET ||==> GET LOGIN
 router.get('/login', (req, res, next) => {
+    let currentUser = req.user;
+    let message = null;
+
+    if (currentUser === null) {
+        message = 'Please Sign-In or Register';
+    }
     return res.render('login');
 })
 
