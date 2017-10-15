@@ -36,6 +36,7 @@
                     <th>Add Date</th>
                     <th>Logo</th>
                     <th>Token Name</th>
+                    <th>Description</th>
                     <th>Added By</th>
                     <th>Popular Votes</th>
                     <th>Vote</th>
@@ -48,11 +49,12 @@
                     <td>{{#formatDate this.createdAt}} {{ this }} {{/formatDate}} </td>
                     <td>{{this.imageUrl }}</td>
                     <td>{{this.name }}</td>
+                    <td>{{this.description}}</td>
                     <td>{{this.addedBy }}</td>
                     <td>{{this.popularity.count }}</td>
                     <td>
-                        <a href="/token/t/{{this._id}}/voteup">up</a>
-                        <a href="/token/t/{{this._id}}/votedown">down</a>
+                        <a href="/token/t/{{this._id}}/1">up</a>
+                        <a href="/token/t/{{this._id}}/2">down</a>
                     </td>
                 </tr>
                 {{/each}}

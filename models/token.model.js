@@ -23,10 +23,9 @@ const TokenSchema = schema({
     },
     popularity: {
         votes: [
-            schema.Types.ObjectId
+            String
         ],
-        count: 0,
-        default: 0
+        count: Number
     },
     originDate: {
         type: Date
@@ -40,10 +39,13 @@ const TokenSchema = schema({
 TokenSchema.pre('save', function(next) {
     const now = new Date();
     this.updatedAt = now;
-    this.popularity.count = 0;
 
     if (!this.createdAt) {
         this.createdAt = now();
+    }
+
+    if (!this.popularity.count) {
+        this.popularity.count = 0;
     }
     next();
 })

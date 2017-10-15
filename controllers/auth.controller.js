@@ -30,7 +30,7 @@ router.get('/login', (req, res, next) => {
 router.get('/logout', (req, res, next) => {
     res.clearCookie('jwtToken');
     res.clearCookie('user');
-    return res.redirect('/login');
+    return res.redirect('/auth/login');
 })
 
 //==| POST ||==> FOR REGISTERING NEW USER
@@ -58,7 +58,7 @@ router.post('/register', (req, res, next) => {
                     res.cookie('jwtToken', 
                                 jwt.sign({_id: newUser._id, username: newUser.username}, 'SEED', {expiresIn: '60 days'}), 
                                 {maxAge: 900000, httpOnly: true})
-                    return res.redirect('/login');
+                    return res.redirect('/auth/login');
                 })
             } else {
                 const message = 'Email is already registered, please login';
