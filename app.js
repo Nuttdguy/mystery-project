@@ -25,10 +25,15 @@ const handlebars = exphbs.create({
                 return;
             }
             return item;
+        },
+        formatDate: function(tokenData) {
+            let d = tokenData.getMonth() 
+                + ' ' + tokenData.getDate() 
+                + ' ' + tokenData.getFullYear();
+            return d;
         }
     }
 });
-
 
 // set configuration for Express 
 app.engine('.hbs', handlebars.engine );

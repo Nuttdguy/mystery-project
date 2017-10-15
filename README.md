@@ -3,6 +3,14 @@
 #### Summary
 An application in which users can voteup a coin's popularity seperated by category of interest, e.g. profitability, technology, community support, market cap, etc.
 
+Additionally, the application will aggregate news associated with the token.
+
+-- TODO: allow users to add links to sites
+-- TODO: crawl web for keyword articles for that token
+-- TODO: users can add keywords, in which to add as additional search criteria
+-- TODO: modify 'TOKEN MODEL', for search functionalty
+
+
 ##### Requirements:
 - Registration
     - Persist user details to DB (Done)

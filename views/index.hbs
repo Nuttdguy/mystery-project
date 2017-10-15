@@ -27,6 +27,37 @@
                 - open/closed ico
                 - description of technology
                 - current value
+        - view all news udpates from coin
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Add Date</th>
+                    <th>Logo</th>
+                    <th>Token Name</th>
+                    <th>Added By</th>
+                    <th>Popular Votes</th>
+                    <th>Vote</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tokenData}} 
+                <tr>
+                    <td>{{@index }}</td>
+                    <td>{{#formatDate this.createdAt}} {{ this }} {{/formatDate}} </td>
+                    <td>{{this.imageUrl }}</td>
+                    <td>{{this.name }}</td>
+                    <td>{{this.addedBy }}</td>
+                    <td>{{this.popularity.count }}</td>
+                    <td>
+                        <a href="/token/t/{{this._id}}/voteup">up</a>
+                        <a href="/token/t/{{this._id}}/votedown">down</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
 
     </section>
 </article>
