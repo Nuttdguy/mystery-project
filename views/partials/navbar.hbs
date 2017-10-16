@@ -1,21 +1,14 @@
 
-<link rel="stylesheet" href="/css/style.css">
-<div class="navbar-wrapper">
-    <div class="navbar">
-        {{#if message}} 
-            <span class="message">{{message}} </span>
-            <span><a href="/auth/login">Login</a></span>
-            <span><a href="/auth/register">Register</a></span>
-        {{/if}}
-        <div class="auth"></div>
-        {{#if currentUser.username}}
-                <span> Welcome :: {{currentUser.username}} </span>
-                <span><a href="/auth/logout">Logout</a></span>
-        {{/if}}
-        </div>
-    </div>
+<div class="navbar navbar-inverse" id="bs-example-navbar-inverse-2">
+
+    {{#if message}}
+    <span class="navbar-brand">{{message}} </span>
+        <a class="btn btn-primary" href="/auth/login">Login</a>
+        <a class="btn btn-primary" href="/auth/register">Register</a>
+    {{/if}}
+
+    {{#if currentUser.username}}
+        <span class="navbar-brand"> Welcome :: {{currentUser.username}} </span>
+        <a class="btn btn-primary" href="/auth/logout">Logout</a>
+    {{/if}}
 </div>
-
-
-
-

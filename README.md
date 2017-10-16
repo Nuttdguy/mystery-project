@@ -55,6 +55,9 @@ Additionally, the application will aggregate news associated with the token.
 - Vote up coin
     - user can upvote
     - user can downvote
+    - view votes by user
+    - view total upvotes
+    - view total down votes
 - Add coin (manual entry)
     - coin model (done)
     - prevent duplicate entries (in-progress - cannot set header err, when redirecting )
@@ -63,7 +66,7 @@ Additionally, the application will aggregate news associated with the token.
     - route to home-index (done)
     - add PUT route (done)
     - Enhance
-        - _method-override implementation
+        - _method-override implementation (done)
 - Delete coin
     - delete coin (done)
     - route to home-index (done)

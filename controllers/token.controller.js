@@ -29,6 +29,7 @@ router.get('/t/:tokenName', (req, res, next) => {
         if (err) {
             res.status(401).redirect('/'); 
         }
+        console.log(tokenData)
         return res.render('token-detail', { currentUser, tokenData, isNotEdit });
     });
 

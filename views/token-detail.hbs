@@ -1,29 +1,43 @@
 <div class="container">
 
-    <div class="form-container">
-    
+    <div class="row">
+
         {{#if isNotEdit}}
             <h3>{{tokenData.name}} 
                 | Details \\ 
                 <form action="/token/t/{{tokenData._id}}/delete?_method=DELETE" method="POST">
-                    <small><a href="/token/t/{{tokenData._id}}/edit">Edit</a></small>
-                    <small><button type="submit">Delete</button></small>
+                
+                    <small><a class="btn btn-link" href="/token/t/{{tokenData._id}}/edit">Edit</a></small>
+                    <small><button class="btn btn-link" type="submit">Delete</button></small>
                 </form>
             </h3>
-            <div class="token-data">
-                <dl>
-                    <small>{{tokenData.addedBy}} :: 
-                        <small>
-                            {{tokenData.createdAt}} >> 
-                            Last updated {{tokenData.updatedAt}}
-                            Popularity ({{tokenData.count}})
-                        </small>
-                    </small>
+    </div>
+    <div class="row">
+        <div class="list-group">
+            <small class="col col-md-4 list-group-item ">Added by: {{tokenData.addedBy}} </small>
+            <small class="col col-md-4 list-group-item ">{{tokenData.createdAt}} </small>
+            <small class="col col-md-4 list-group-item ">Last updated {{tokenData.updatedAt}}</small>   
 
-                    <dt>Token name: 
-                        <span>{{tokenData.name}}</span>
-                        <span>Popularity ({{tokenData.popularity.count}}) </span>
-                    </dt>
+        </div>
+    </div>
+     <div class="row">
+        <dl class="col-md-12">
+            <dt>Token name: 
+                <span>{{tokenData.name}}</span>
+                <span>Popularity ({{tokenData.popularity.count}}) </span>
+            </dt>
+
+            <dt>Votes: 
+                <span>Down votes{{tokenData.popularity.downCount}}</span>
+                <span>Up votes ({{tokenData.popularity.count}}) </span>
+                <span>Total votes 
+                    (
+                        {{#tallyVotes tokenData.popularity}}
+                            {{this}}
+                        {{/tallyVotes}}
+                    ) 
+                </span>
+            </dt>
 
                     <dt>Image Url:
                         <span><img src="{{tokenData.imageUrl}}" alt="Token image"></span>
@@ -38,6 +52,21 @@
                     </dt>
                 </dl>
             </div>
+    </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>voted by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each tokenData.popularity.votes}}
+                        <tr>
+                            <td> {{this}} </td>                          
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>    
 
             {{else}} 
 
@@ -72,13 +101,9 @@
 
         {{/if}}
 
+        </div>
     </div>
 
 </div>
-{{!--   USE CONDITION TO ENABLE EDIT
-
-<div class="container">
 
 
-
-</div> --}}

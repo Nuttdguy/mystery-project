@@ -34,7 +34,24 @@ const handlebars = exphbs.create({
         },
         tallyCount: function(tokenData) {
             return tokenData.count - tokenData.downCount;
-        }
+        },
+        tallyVotes: function(tokenData) {
+            return tokenData.count + tokenData.downCount;
+        },
+        contructVotersTable: function(tokenData) {
+            let html = '';
+            for (let i = 0; i < tokenData.popularity.votes.length; i++ ) {
+                user = tokenData.popularity.votes[i];
+                count = tokenData.popularity.count;
+                downVote = tokenData.popularity.downCount;
+                total =  tokenData.popularity.count + tokenData.popularity.downCount;
+                html += "<tr><td>"+ user + "</td>" +
+                "<td>"+ count + "</td>" +
+                "<td>"+ downVote + "</td>" +
+                "<td>"+ total + "</td></tr>";
+            }
+            return html;
+        },
     }
 });
 
