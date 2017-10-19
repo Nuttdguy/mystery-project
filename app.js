@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const jsonWebToken = require('jsonwebtoken');
+const shortid = require('short-id');
+const fileUpload = require('express-fileupload');
+
 
 // create an instance of express class
 const app = express();
@@ -33,32 +36,40 @@ const handlebars = exphbs.create({
             return d;
         },
         tallyCount: function(tokenData) {
+            if (tokenData == null) {
+                return tokenData;
+            }
             return tokenData.count - tokenData.downCount;
         },
         tallyVotes: function(tokenData) {
-            return tokenData.count + tokenData.downCount;
-        },
-        contructVotersTable: function(tokenData) {
-            let html = '';
-            for (let i = 0; i < tokenData.popularity.votes.length; i++ ) {
-                user = tokenData.popularity.votes[i];
-                count = tokenData.popularity.count;
-                downVote = tokenData.popularity.downCount;
-                total =  tokenData.popularity.count + tokenData.popularity.downCount;
-                html += "<tr><td>"+ user + "</td>" +
-                "<td>"+ count + "</td>" +
-                "<td>"+ downVote + "</td>" +
-                "<td>"+ total + "</td></tr>";
+            if (tokenData == null) {
+                return tokenData;
             }
-            return html;
-        },
+            return tokenData.count + tokenData.downCount;
+        }
     }
 });
+
+// contructVotersTable: function(tokenData) {
+//     let html = '';
+//     for (let i = 0; i < tokenData.popularity.votes.length; i++ ) {
+//         user = tokenData.popularity.votes[i];
+//         count = tokenData.popularity.count;
+//         downVote = tokenData.popularity.downCount;
+//         total =  tokenData.popularity.count + tokenData.popularity.downCount;
+//         html += "<tr><td>"+ user + "</td>" +
+//         "<td>"+ count + "</td>" +
+//         "<td>"+ downVote + "</td>" +
+//         "<td>"+ total + "</td></tr>";
+//     }
+//     return html;
+// },
 
 // set configuration for Express 
 app.engine('.hbs', handlebars.engine );
 app.set('view engine', '.hbs');
-app.use(express.static('./public'));
+app.use(express.static( './public' ));
+// app.use(express.static('./public/uploads'));
 
 // configure middleware
 app.use(bodyParser.urlencoded( { extended: true } ));
@@ -80,8 +91,6 @@ app.use( function(req, res, next) {
     next();
 });
 
-// app.use(checkAuth);
-
 // controller routes
 const homeRoutes = require('./controllers/home.controller');
 const authRoutes = require('./controllers/auth.controller');
@@ -101,5 +110,4 @@ app.listen( portNumber, () => {
     console.log('Application is running on port === ' + portNumber);
 });
 
-
-
+module.exports = app;

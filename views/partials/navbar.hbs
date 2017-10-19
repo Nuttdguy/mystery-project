@@ -1,14 +1,15 @@
 
-<div class="navbar navbar-inverse" id="bs-example-navbar-inverse-2">
+<div class="navbar navbar-inverse" >
+    <ul>
+        {{#if message}}
+            <span class="navbar-brand">{{message}} </span>
+            <a class="btn btn-primary" href="/auth/login">Login</a>
+            <a class="btn btn-primary" href="/auth/register">Register</a>
+        {{/if}}
 
-    {{#if message}}
-    <span class="navbar-brand">{{message}} </span>
-        <a class="btn btn-primary" href="/auth/login">Login</a>
-        <a class="btn btn-primary" href="/auth/register">Register</a>
-    {{/if}}
-
-    {{#if currentUser.username}}
-        <span class="navbar-brand"> Welcome :: {{currentUser.username}} </span>
-        <a class="btn btn-primary" href="/auth/logout">Logout</a>
-    {{/if}}
+        {{#if currentUser.username}}
+            <span class="navbar-brand"> Welcome :: {{currentUser.username}} </span>
+            <a class="btn btn-primary" href="/auth/logout">Logout</a>
+        {{/if}}
+    </ul>
 </div>

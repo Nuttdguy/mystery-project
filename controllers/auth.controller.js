@@ -30,20 +30,19 @@ router.get('/login', (req, res, next) => {
 router.get('/logout', (req, res, next) => {
     res.clearCookie('jwtToken');
     res.clearCookie('user');
-    return res.redirect('/auth/login');
+    res.redirect('/auth/login');
 })
 
 //==| POST ||==> FOR REGISTERING NEW USER
 router.post('/register', (req, res, next) => {
 
-    // create new user object with form content as body
     let newUser = new UserModel(req.body);
 
     // check if email matches, if not, send error
     let email = newUser.email;
     if (req.body.password != req.body.password_verify) {
         const message = 'Passwords do not match';
-        return res.status(401).render('./errors/register', { message });
+        return res.render('./errors/register', { message });
     }
 
     UserModel.findOne({email: email}).exec( (err, userData) => {
@@ -57,12 +56,13 @@ router.post('/register', (req, res, next) => {
                     
                     res.cookie('jwtToken', 
                                 jwt.sign({_id: newUser._id, username: newUser.username}, 'SEED', {expiresIn: '60 days'}), 
-                                {maxAge: 900000, httpOnly: true})
-                    return res.redirect('/auth/login');
+                                {maxAge: 900000, httpOnly: true});
                 })
+                res.redirect('/auth/login');
+
             } else {
                 const message = 'Email is already registered, please login';
-                return res.status(401).render('./errors/register', { message });
+                res.status(401).render('./errors/register', { message });
             }
         }
     })
@@ -75,38 +75,31 @@ router.post('/login', (req, res, next) => {
     UserModel.findOne( {email: formBody.email}, {}, (err, userData) => {
         if (err) {
             const message = 'Email or password is invalid';
-            return res.status(401).render('./errors/login-err', { message });
-        } else {
-            // the returned result is a mongoose object
-            return userData;
+            return res.render('./errors/login-err', { message });
         }
+            
+        return userData;
     }).then( (userData) => {
+
         userData.comparePassword(formBody.password, function(err, isMatch) {
             if (!isMatch) {
                 const message = 'Email or password is invalid';
-                return res.status(401).render('./errors/login-err', { message });
-            } else {
-                res.cookie('jwtToken', 
-                            jwt.sign({_id: userData._id, username: userData.username}, 'SEED', {expiresIn: '60 days'}), 
-                            {maxAge: 900000, httpOnly: true})
-                res.redirect('/');
+                return res.render('./errors/login-err', { message });
             }
+            
+            res.cookie('jwtToken', 
+                        jwt.sign({_id: userData._id, username: userData.username}, 'SEED', {expiresIn: '60 days'}), 
+                        {maxAge: 900000, httpOnly: true})
+
+            res.redirect('/');
         })
+
     }).catch( (err) => {
         const message = 'Email or password is invalid';
-        return res.status(401).render('./errors/login-err', { message });
+        return res.render('./errors/login-err', { message });
     })
-
+    
 });
-
-
-//==| UPDATE/PUT ROUTES
-
-
-
-
-//==| DELETE ROUTES
-
 
 
 

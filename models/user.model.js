@@ -16,8 +16,7 @@ const UserSchema = schema({
         required: true
     },
     username: {
-        type: String,
-        default: this.email
+        type: String
     },
     password: {
         type: String,

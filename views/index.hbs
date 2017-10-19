@@ -4,13 +4,15 @@
         <div class="list-group">
 
             <ul>
+
                 <span class="list-group-item active">
                     Tokens
                     <a href="/token/t">// Add token</a>
                 </span>
+
                 {{#each tokenData}}
                     <li class="list-group-item">
-                        {{!-- <img src="{{this.imageUrl}}" alt="logo">  --}}
+                        <img src="{{this.imageUrl}}" alt="logo"> 
                         <a href="/token/t/{{this.name}}">{{this.name}}</a>
                         <span>(
                         {{#tallyCount this.popularity}} 
@@ -19,6 +21,7 @@
                         )</span>
                     </li>
                 {{/each}}
+                
             </ul>
 
         </div>
@@ -35,9 +38,9 @@
                     <th>Token Name</th>
                     <th>Description</th>
                     <th>Added By</th>
-                    {{!-- <th>Up Vote</th>
-                    <th>Down Vote</th> --}}
-                    <th>Total Votes</th>
+                    <th>Up Vote</th>
+                    <th>Down Vote</th>
+                    {{!-- <th>Total Votes</th> --}}
                     <th>Vote</th>
                 </tr>
             </thead>
@@ -46,16 +49,16 @@
                 <tr>
                     <td>{{@index }}</td>
                     <td>{{#formatDate this.createdAt}} {{ this }} {{/formatDate}} </td>
-                    <td>{{this.imageUrl }}</td>
+                    <td><img src="{{this.imageUrl}}" alt="logo"></td>
                     <td>{{this.name }}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.addedBy }}</td>
-                    {{!-- <td>{{this.popularity.count }}</td>
-                    <td>{{this.popularity.downCount }}</td> --}}
-                    <td>{{#tallyCount this.popularity}} 
+                    <td>{{this.popularity.count }}</td>
+                    <td>{{this.popularity.downCount }}</td>
+                    {{!-- <td>{{#tallyCount this.popularity}} 
                             {{ this }} 
                         {{/tallyCount}} 
-                    </td>
+                    </td> --}}
                     <td>
                         <a href="/token/t/{{this._id}}/1">up</a>
                         <a href="/token/t/{{this._id}}/2">down</a>

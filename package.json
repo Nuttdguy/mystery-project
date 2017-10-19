@@ -1,10 +1,10 @@
 {
   "name": "coinup_project",
   "version": "1.0.0",
-  "description": "#### Summary An application in which users can voteup a coin's popularity seperated by category of interest, e.g. profitability, technology, community support, market cap, etc.",
+  "description": "Coin notes",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -13,9 +13,15 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
+    "express-fileupload": "^0.3.0",
     "express-handlebars": "^3.0.0",
     "jsonwebtoken": "^8.1.0",
     "method-override": "^2.3.10",
-    "mongoose": "^4.12.1"
+    "mongoose": "^4.12.1",
+    "short-id": "0.1.0-1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }

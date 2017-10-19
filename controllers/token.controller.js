@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const TokenModel = require('../models/token.model');
+const shortid = require('short-id');
 
 
 //===========================================================
@@ -13,7 +14,7 @@ router.get('/t', (req, res, next) => {
     let currentUser = req.user;
 
     if (!currentUser) {
-        res.status(401).redirect('/auth/login');
+        return res.redirect('/auth/login');
     }
 
     return res.render('token', {currentUser} );
@@ -25,11 +26,14 @@ router.get('/t/:tokenName', (req, res, next) => {
     let currentUser = req.user;
     let isNotEdit = true; // enable or disable temaplate form for edit
 
+    if (!currentUser) {
+        return res.redirect('/auth/login');
+    }
+
     TokenModel.findOne({name: req.params.tokenName}, function(err, tokenData) {
         if (err) {
-            res.status(401).redirect('/'); 
+            return res.redirect('/'); 
         }
-        console.log(tokenData)
         return res.render('token-detail', { currentUser, tokenData, isNotEdit });
     });
 
@@ -40,13 +44,17 @@ router.get('/t/:tokenId/edit', (req, res, next) => {
     let currentUser = req.user;
     let isNotEdit = false;
 
-    TokenModel.findOne({_id: req.params.tokenId}, function(err, tokenData) {
-        if (err) {
-            res.status(401).redirect('/'); 
-        }
-        return res.render('token-detail', { currentUser, tokenData, isNotEdit });
-    });
+    if (!currentUser) {
+        return res.redirect('/auth/login');
+    } else {
 
+        TokenModel.findOne({_id: req.params.tokenId}, function(err, tokenData) {
+            if (err) {
+                res.redirect('/'); 
+            }
+            return res.render('token-detail', { currentUser, tokenData, isNotEdit });
+        });
+    }
 });
 
 
@@ -91,13 +99,13 @@ router.get('/t/:tokenId/:vote', (req, res, next) => {
                 if (err) {
                     res.status(401).send(err);
                 }  
-            });
 
-            return tokenData;
+                return tokenData;
+            });
 
         }).then((tokenData) => {
 
-            res.redirect('/');  
+            return res.redirect('/');  
 
         }).catch( (err) => {
             console.log(err);
@@ -145,7 +153,7 @@ router.get('/t/:tokenId/:vote', (req, res, next) => {
             return tokenData;
         }).then((tokenData) => {
           
-            res.redirect('/');  
+            return res.redirect('/');  
 
         }).catch( (err) => {
             console.log(err);
@@ -166,55 +174,56 @@ router.post('/t', (req, res, next) => {
     tokenData.addedBy = currentUser.username;
 
     if (!currentUser) {
-        return res.status(401).send('/auth/login');
+        return res.send('/login');
     } else {
 
         // check if token already exist
         TokenModel.findOne({name: tokenData.name}, (err, data) => {
             if (err) {
                 const message = 'Something happened';
-                return res.status(401).render('./errors/token-err', {err, message});
+                return res.render('./errors/token-err', {err, message});
             }
             // return data;
             if (tokenData !== undefined || data.name !== tokenData.name) {
                 tokenData.save( function(err) {
                     if (err) {
                         const message = 'Token could not be added';
-                        return res.status(401).render('/', {err, message})
+                        return res.render('/', {err, message})
                     } 
                 })
+                return res.redirect('/');
             }
         })
-        // .then( (data) => {
-        //     if (data.name !== tokenData.name) {
-        //         tokenData.save( function(err) {
-        //             if (err) {
-        //                 const message = 'Token could not be added';
-        //                 return res.status(401).render('/', {err, message})
-        //             } 
-        //         })
-        //     } 
-        //     // TODO QUESTION: WHY DOES THIS NOT WORK, AUTH MIDDLEWARE CAUSING 
-        //     // CANNOT SET HEADER ERROR
-
-        //     else {
-        //         const message = 'Unknown error occurred';
-        //         return res.render('./errors/token-err', {message}); 
-        //     }
-
-        // }).catch( (err) => {
-        //     const message = 'Unknown error occurred';
-        //     return res.status(500).render('./errors/token-err', {err, message});
-        // })
-
-        return res.redirect('/');
     }
+
 });
 
 
+// router.post('/t/upload', (req, res, next) => {
+//     const body = req.body;
+//     const imageFile = req.files.image;
+//     const fileNameArray = imageFile.name.split('.');
+//     const fileExtsion = fileNameArray[fileNameArray.length - 1];
+    
+//     const filePath = `./public/uploads/${shortid.generate()}.${fileExtsion}`;
+//     imageFile.mv(filePath, (err) => {
 
+//         if (err) {
+//             console.log(err);
+//             return;
+//         }
 
+//         const tokenImage = new TokenModel({body, path: filePath, originalFileName: imageFile.name});
+        
+//         tokenImage.save().then( (token) => {
+//             res.redirect('/');
+//         }).catch((err) => {
+//             console.log(err);
+//         });
 
+//   });
+    
+// });
 
 //===========================================================
 //==================  UPDATE ROUTES =======================
@@ -223,23 +232,22 @@ router.post('/t', (req, res, next) => {
 
 router.put('/t/:tokenId/edit', (req, res, next) => {
     let currentUser = req.user;
-    let tokenModel = new TokenModel(req.body);
+    console.log(currentUser.username);
 
     TokenModel.findByIdAndUpdate(req.params.tokenId, 
             { $set: { 
                 updatedAt: new Date(),
-                name: tokenModel.name,
-                addedBy: tokenModel.addedBy,
-                imageUrl: tokenModel.imageUrl,
-                originDate: tokenModel.originDate,
-                description: tokenModel.description }
+                name: req.body.name,
+                modifiedBy: currentUser.username,
+                imageUrl: req.body.imageUrl,
+                originDate: req.body.originDate,
+                description: req.body.description }
             }, (err) => {
         if (err) {
-            return res.status(401).redirect('/');  
+            return res.redirect('/');  
         }
-        return res.redirect('/');
     })
-
+    return res.redirect('/');
 })
 
 
@@ -254,9 +262,9 @@ router.delete('/t/:tokenId/delete', (req, res, next) => {
 
     TokenModel.deleteOne({_id: req.params.tokenId}, (err) => {
         if (err) {
-            return res.status(401).redirect('/');  
+            return res.redirect('/');  
         }
-        return res.redirect('/');
+        res.redirect('/');
     })
 })
 

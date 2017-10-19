@@ -14,11 +14,17 @@ const TokenSchema = schema({
         type: String,
         required: true
     },
+    modifiedBy: {
+        type: String
+    },
     name: {
         type: String,
         required: true
     },
     imageUrl: {
+        type: String
+    },
+    image: {
         type: String
     },
     popularity: {
@@ -43,6 +49,7 @@ const TokenSchema = schema({
 TokenSchema.pre('save', function(next) {
     const now = new Date();
     this.updatedAt = now;
+    
 
     if (!this.createdAt) {
         this.createdAt = now();
@@ -55,6 +62,7 @@ TokenSchema.pre('save', function(next) {
     if (!this.popularity.downCount) {
         this.popularity.downCount = 0;
     }
+
     next();
 })
 

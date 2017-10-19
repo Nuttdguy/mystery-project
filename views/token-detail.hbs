@@ -1,107 +1,158 @@
 <div class="container">
 
     <div class="row">
-
         {{#if isNotEdit}}
             <h3>{{tokenData.name}} 
-                | Details \\ 
+                | Details 
                 <form action="/token/t/{{tokenData._id}}/delete?_method=DELETE" method="POST">
-                
-                    <small><a class="btn btn-link" href="/token/t/{{tokenData._id}}/edit">Edit</a></small>
-                    <small><button class="btn btn-link" type="submit">Delete</button></small>
+                    <small>\\<a class="btn btn-link" href="/token/t/{{tokenData._id}}">Back</a></small>
+                    <small>\\<a class="btn btn-link" href="/token/t/{{tokenData._id}}/edit">Edit</a></small>
+                    <small>\\<button class="btn btn-link" type="submit">Delete</button></small>
                 </form>
             </h3>
     </div>
+
     <div class="row">
         <div class="list-group">
             <small class="col col-md-4 list-group-item ">Added by: {{tokenData.addedBy}} </small>
             <small class="col col-md-4 list-group-item ">{{tokenData.createdAt}} </small>
             <small class="col col-md-4 list-group-item ">Last updated {{tokenData.updatedAt}}</small>   
-
         </div>
     </div>
+
      <div class="row">
-        <dl class="col-md-12">
-            <dt>Token name: 
-                <span>{{tokenData.name}}</span>
-                <span>Popularity ({{tokenData.popularity.count}}) </span>
+        <dl>
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Token name: </span>
+                    <span class="col-md-3">{{tokenData.name}}</span>               
+                    <span class="col-md-3">Popularity ( {{tokenData.popularity.count}} ) </span>
+                </div>
             </dt>
 
-            <dt>Votes: 
-                <span>Down votes{{tokenData.popularity.downCount}}</span>
-                <span>Up votes ({{tokenData.popularity.count}}) </span>
-                <span>Total votes 
-                    (
-                        {{#tallyVotes tokenData.popularity}}
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Popularity</span>
+                    <span class="col-md-3">Down votes ( {{tokenData.popularity.downCount}} )</span>
+                    <span class="col-md-3">Up votes ( {{tokenData.popularity.count}} )</span>               
+                    <span class="col-md-3">Total votes 
+                        ( {{#tallyVotes tokenData.popularity}}
                             {{this}}
-                        {{/tallyVotes}}
-                    ) 
-                </span>
+                        {{/tallyVotes}} )
+                    </span>
+                </div>
+            </dt>
+{{!-- 
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Image: </span>
+                    <form class="col-md-12" action='/token/t/upload' method='post' enctype="multipart/form-data">
+                        <span class="col-md-3"> <input type='text' placeholder='name' name='name'> </span>
+                        <span class="col-md-3"> <input type='file' placeholder='image' name='image'> </span>
+                        <span class="col-md-3"> <button type='submit'>Submit</button></span>
+                    </form>
+                </div>
+            </dt> --}}
+
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Image Url: </span>
+                    <span class="col-md-3">
+                        <img src="{{tokenData.imageUrl}}" alt="Token image">
+                    </span>
+                </div>
             </dt>
 
-                    <dt>Image Url:
-                        <span><img src="{{tokenData.imageUrl}}" alt="Token image"></span>
-                    </dt>
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Origin date: </span>
+                    <span class="col-md-3">{{tokenData.originDate}}</span>               
+                </div>
+            </dt>
 
-                    <dt>Token origin:
-                        <span>{{tokenData.originDate}}</span>
-                    </dt>
-
-                    <dt>Token description
-                        <span>{{tokenData.description}}</span>
-                    </dt>
-                </dl>
-            </div>
+            <dt class="list-group">
+                <div class="col col-md-12">
+                    <span class="col-md-3">Description: </span>
+                    <span class="col-md-3">{{tokenData.description}}</span>               
+                </div>
+            </dt>
+        </dl>
     </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>voted by</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each tokenData.popularity.votes}}
-                        <tr>
-                            <td> {{this}} </td>                          
-                        </tr>
-                    {{/each}}
-                </tbody>
-            </table>    
 
-            {{else}} 
+    <br>
 
-            <div class="form-container">
-                <form action="/token/t/{{tokenData._id}}/edit?_method=PUT" method="POST">
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr class="success">
+                <th>voted by</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each tokenData.popularity.votes}}
+                <tr>
+                    <td> {{this}} </td>                          
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>    
+
+    {{else}} 
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="well bs-component">
+                <form class="form-horizontal" action="/token/t/{{tokenData._id}}/edit?_method=PUT" method="POST">
+                <input hidden type="text" name="username" id="username" value="{{ currentUser.username }}"> 
                     <h3>{{tokenData.name}} | Edit details</h3>
-                    <div class="token-data">
-                        <div class="token-name">
-                            <label for="name">Token Name</label>
-                            <input type="text" name="name" id="name" value='{{tokenData.name}}'>
+
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="name">Token Name</label>
+                                <input type="text" class="col col-md-9 form-control" name="name" id="name" value="{{tokenData.name}}">
+                            </div>
                         </div>
-                        <div class="token-data">
-                            <label for="imageUrl">Image Url</label>
-                            <input type="text" name="imageUrl" id="imageUrl" value='{{tokenData.imageUrl}}'>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="imageUrl">Image Url</label>
+                                <input type="text" class="form-control"  name="imageUrl" id="imageUrl" value="{{tokenData.imageUrl}}">
+                            </div>
                         </div>
-                        <div class="token-data">
-                            <label for="originDate">Origin Date</label>
-                            <input type="text" name="originDate" id="originDate" value='{{tokenData.originDate}}'>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="originDate">Origin Date</label>
+                                <input type="date" class="form-control" required name="originDate" id="originDate" value="{{tokenData.originDate}}">
+                            </div>
                         </div>
-                        <div class="token-data">
-                            <label for="description">Description</label>
-                            <textarea name="description" 
-                                        class="description" 
-                                        id="description" 
-                                        cols="30" rows="10">{{tokenData.description}}
-                            </textarea>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="description">Description</label>
+                                <textarea name="description" 
+                                            class="form-control"
+                                            id="description" rows="3">{{tokenData.description}}</textarea>
+                                <span class="help-block"></span>
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit">Submit</button>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="control-label">Image Upload: </span>
+                                <input class="col-md-3" type='text' placeholder='name' name='name'>
+                                <input class="col-md-3" type='file' placeholder='image' name='image'>
+                            </div>
+                        </div>
+
+                        <button class='btn btn-primary' type="submit">Submit</button>
+                    </fieldset>
+
                 </form>
             </div>
-
-        {{/if}}
-
         </div>
+    </div>
+    {{/if}}
+
     </div>
 
 </div>
